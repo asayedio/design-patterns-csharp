@@ -4,13 +4,18 @@
     {
         public int count = 0;
         private static Counter instance = null;
+        private static Object lockObject = new Object();
+
 
         private Counter() { }
 
         public static Counter GetInstance()
         {
-            if (instance is null) instance = new Counter(); // Lazy Initialization
-            return instance;
+            lock (lockObject)
+            {
+                if (instance is null) instance = new Counter(); // Lazy Initialization
+                return instance;
+            }
         }
         public void AddOne() => count++;
     }
